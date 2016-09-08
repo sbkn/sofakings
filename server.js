@@ -22,8 +22,7 @@ app.get("/", function (req, res) {
 	res.sendFile(__dirname + "/index.html");
 });
 
-// You probably have other paths here
-app.use(express.static("dist"));
+app.use(express.static("static"));
 
 const server = new http.Server(app);
 const io = require("socket.io")(server);

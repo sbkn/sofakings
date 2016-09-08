@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "react": "^0.14.6",
+    "react-bootstrap": "^0.30.3",
     "react-dom": "^0.14.6"
   }
 }

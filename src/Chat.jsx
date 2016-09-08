@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import io from "socket.io-client";
-
+import Button from "react-bootstrap/lib/Button";
+import FormGroup from "react-bootstrap/lib/FormGroup";
+import Jumbotron from "react-bootstrap/lib/Jumbotron";
 
 export default class Chat extends Component {
 
@@ -42,24 +44,34 @@ export default class Chat extends Component {
 		});
 	}
 
-	render() {
-		return (
-			<div>
-				<h1>Sofa Kings</h1>
-				<input id="msgField"/>
-				<a id="sendBtn" onClick={this._sendMsgToSrv} href="#">Send</a>
-				<a id="sessionLink" href="#">Session Link</a>
-				<ul id="msgList"></ul>
-			</div>
-		);
-	}
+	_sendMsgToSrv(e) {
 
-
-	_sendMsgToSrv() {
+		e.preventDefault();
 
 		const msg = document.getElementById("msgField").value;
 		this.socket.emit("clientMsg", msg);
 		document.getElementById("msgField").value = "";
 		return true;
+	}
+
+	render() {
+		return (
+			<Jumbotron className="text-center">
+				<h1>Sofa Kings</h1>
+
+				<form onSubmit={this._sendMsgToSrv}>
+					<FormGroup>
+						<input type="text" id="msgField"/>
+					</FormGroup>
+					<Button type="submit">
+						Submit
+					</Button>
+				</form>
+
+				<a id="sessionLink" href="#">Session Link</a>
+
+				<ul id="msgList"></ul>
+			</Jumbotron>
+		);
 	}
 }
