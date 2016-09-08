@@ -56,21 +56,23 @@ export default class Chat extends Component {
 
 	render() {
 		return (
-			<Jumbotron className="text-center">
-				<h1>Sofa Kings</h1>
+			<Jumbotron className="text-center jumbotron-fluid">
+				<div className="container">
+					<h1>Sofa Kings</h1>
 
-				<form onSubmit={this._sendMsgToSrv}>
-					<FormGroup>
-						<input type="text" id="msgField"/>
-					</FormGroup>
-					<Button type="submit">
-						Submit
-					</Button>
-				</form>
+					<form onSubmit={this._sendMsgToSrv}>
+						<FormGroup>
+							<input type="text" id="msgField"/>
+						</FormGroup>
+						<Button type="submit">
+							Submit
+						</Button>
+					</form>
 
-				<a id="sessionLink" href="#">Session Link</a>
+					<a id="sessionLink" href="#">Session Link</a>
 
-				<ul id="msgList"></ul>
+					<ul id="msgList"></ul>
+				</div>
 			</Jumbotron>
 		);
 	}
