@@ -50,6 +50,6 @@ io.on("connection", function (socket) {
 	socket.on("clientMsg", function (msg) {
 		console.log("message: " + msg);
 
-		io.to(uuid).emit("srvMsg", "RESPONSE TO GRP: " + uuid + "</br> msg: <b>" + msg + "</b>");
+		io.to(uuid).emit("srvMsg", "msg: <b>" + msg + "</b>");
 	});
 });
