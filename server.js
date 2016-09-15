@@ -18,14 +18,14 @@ app.use(require("webpack-hot-middleware")(compiler));
 
 app.get("/", function (req, res) {
 
-	//res.render("index.html");
 	res.sendFile(__dirname + "/index.html");
 });
 
 app.use(express.static("static"));
 
 const server = new http.Server(app);
-const io = require("socket.io")(server);
+
+const io = require("socket.io")(server,{origins:"localhost:*"});
 
 const PORT = process.env.PORT || 3000;
 
@@ -35,7 +35,7 @@ server.listen(PORT, function () {
 
 io.on("connection", function (socket) {
 
-	console.log("a user connected.");
+	console.log("a user connected ..");
 
 	var uuid = socket.handshake.query.uuid || uuidModule.v1();
 
