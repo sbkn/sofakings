@@ -3,11 +3,16 @@ var webpack = require("webpack");
 
 module.exports = {
 	devtool: "eval",
+	target: "web",
 	entry: [
-		"webpack-dev-server/client?http://localhost:3001",
+		"webpack-dev-server/client?http://localhost:8080",
 		"webpack/hot/only-dev-server",
 		"./src/index.jsx"
 	],
+	node: {
+		fs: "empty",
+		tls: "empty"
+	},
 	output: {
 		path: path.join(__dirname, "dist"),
 		filename: "bundle.js",
@@ -21,9 +26,20 @@ module.exports = {
 	module: {
 		loaders: [
 			{
-				test: /\.jsx/,
+				test: /\.(jsx|es6|js)/,
 				loaders: ["react-hot", "babel"],
 				include: path.join(__dirname, "src")
-    }]
+			}
+		],
+		noParse: [
+			/aws\-sdk/,
+			/aws\-iot\-device\-sdk/
+
+		]
+	},
+	resolve: {
+		alias: {
+			"aws-sdk": "aws-sdk/dist/aws-sdk.min.js"
+		}
 	}
 };
