@@ -50,11 +50,10 @@ export default class Chat extends React.Component {
 			qr.make();
 
 			const qrImg = qr.createImgTag(4);
-			const test = qrImg.substr(qrImg.indexOf("\"") + 1);
-			const test2 = test.substr(0, test.indexOf("\""));
-			console.log(test2);
+			const foo = qrImg.substr(qrImg.indexOf("\"") + 1);
+			const bar = foo.substr(0, foo.indexOf("\""));
 
-			this.setState({sessionLink, qrImgSrc: test2});
+			this.setState({sessionLink, qrImgSrc: bar});
 		});
 	}
 
@@ -82,6 +81,12 @@ export default class Chat extends React.Component {
 				<div className="container">
 					<h1>Sofa Kings</h1>
 
+					<img id="qrCode" src={this.state.qrImgSrc}/>
+					<a id="sessionLink" href={this.state.sessionLink}>Session
+						Link</a>
+
+					<ul id="msgList"></ul>
+
 					<form onSubmit={this._sendMsgToSrv}>
 						<FormGroup>
 							<input type="text" id="msgField"/>
@@ -90,10 +95,6 @@ export default class Chat extends React.Component {
 							Submit
 						</Button>
 					</form>
-					<img id="qrCode" src={this.state.qrImgSrc}/>
-					<a id="sessionLink" href={this.state.sessionLink}>Session Link</a>
-
-					<ul id="msgList"></ul>
 				</div>
 			</Jumbotron>
 		);
