@@ -62,8 +62,10 @@ export default class Chat extends React.Component {
 		e.preventDefault();
 
 		const msg = document.getElementById("msgField").value;
-		this.socket.emit("clientMsg", msg);
-		document.getElementById("msgField").value = "";
+		if (msg) {
+			this.socket.emit("clientMsg", msg);
+			document.getElementById("msgField").value = "";
+		}
 		return true;
 	}
 
