@@ -14,13 +14,14 @@ export default class Chat extends React.Component {
 		super(props);
 		this._sendMsgToSrv = this._sendMsgToSrv.bind(this);
 
-		let queryParam = null;
+		let queryParamFromUrl = null;
 		if (window.location.href.indexOf("?") > -1) {
-			queryParam = window.location.href.slice(window.location.href.indexOf("?") + 1);
+			queryParamFromUrl = window.location.href.slice(window.location.href.indexOf("?") + 1);
 		}
-		console.log("UUID IN URL:", queryParam);
-		this.uuid = queryParam || null;
-		this.socket = io.connect("http://" + window.location.host, this.uuid ? {query: "uuid=" + this.uuid} : null);
+		console.log("UUID IN URL:", queryParamFromUrl);
+		this.uuid = queryParamFromUrl || null;
+		const serverConnQuery = this.uuid ? {query: "uuid=" + this.uuid} : null;
+		this.socket = io.connect("http://" + window.location.host, serverConnQuery);
 
 		this.init();
 	}

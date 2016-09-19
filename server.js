@@ -25,7 +25,7 @@ app.use(express.static("static"));
 
 const server = new http.Server(app);
 
-const io = require("socket.io")(server,{origins:"localhost:*"});
+const io = require("socket.io")(server/*,{origins:"localhost:*"}*/);
 
 const PORT = process.env.PORT || 3000;
 
