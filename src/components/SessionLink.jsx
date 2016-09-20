@@ -51,7 +51,7 @@ export default class SessionLink extends React.Component {
 				<div className="form-row__item">
 					<a id="sessionLink" target="_blank"
 					   href={this.state.link}>
-						Open Sender
+						Share session ...
 					</a>
 					<div>
 						SessionId:<br/>
