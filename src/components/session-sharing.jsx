@@ -46,25 +46,6 @@ export default class SessionSharing extends SessionSharingBase {
 		});
 	}
 
-	static _getSessionIdFromUrl() {
-
-		let uuid = null;
-
-		if (window.location.href.indexOf("?") > -1) {
-			uuid = window.location.href.slice(
-				window.location.href.indexOf("?") + 1
-			);
-		}
-
-		console.log("UUID IN URL:", uuid);
-
-		if (!uuid) {
-			throw new Error("no id in url found!")
-		}
-
-		return uuid;
-	}
-
 	_handleUploadFile(event) {
 
 		this._getFileFromInput(event.target);
@@ -177,6 +158,39 @@ export default class SessionSharing extends SessionSharingBase {
 		}
 	}
 
+	_addFileToList(fileName, frontEndFileId) {
+
+		const docs = [...this.state.docs];
+
+		docs.push({
+			fileName,
+			frontEndFileId
+		});
+
+		this.setState({
+			docs
+		});
+	}
+
+	static _getSessionIdFromUrl() {
+
+		let uuid = null;
+
+		if (window.location.href.indexOf("?") > -1) {
+			uuid = window.location.href.slice(
+				window.location.href.indexOf("?") + 1
+			);
+		}
+
+		console.log("UUID IN URL:", uuid);
+
+		if (!uuid) {
+			throw new Error("no id in url found!")
+		}
+
+		return uuid;
+	}
+
 	render() {
 
 		return (
@@ -276,17 +290,4 @@ export default class SessionSharing extends SessionSharingBase {
 
 	}
 
-	_addFileToList(fileName, frontEndFileId) {
-
-		const docs = [...this.state.docs];
-
-		docs.push({
-			fileName,
-			frontEndFileId
-		});
-
-		this.setState({
-			docs
-		});
-	}
 }
