@@ -3,6 +3,7 @@ import uuid from "uuid";
 import SessionSharingBase from "./session-sharing-base.jsx";
 import FileInfo from "./FileInfo.jsx";
 import SessionLink from "./SessionLink.jsx";
+import apigClientFactory from "../../libs/api-client-loader.es6";
 
 export default class SessionSharing extends SessionSharingBase {
 
@@ -20,6 +21,7 @@ export default class SessionSharing extends SessionSharingBase {
 		super(props);
 
 		this._sendMsgToSrv = this._sendMsgToSrv.bind(this);
+		this.handleUploadFile = this.handleUploadFile.bind(this);
 		this._rotateSessionId = this._rotateSessionId.bind(this);
 
 		let currentUuid;
@@ -75,11 +77,17 @@ export default class SessionSharing extends SessionSharingBase {
 		return uuid;
 	}
 
+	handleUploadFile(event) {
+
+		this.getFileFromInput(event.target);
+	}
+
 	_sendMsgToSrv(e) {
 
 		e.preventDefault();
 
-		const fileName = e.target.value.substr(e.target.value.lastIndexOf("\\") + 1);
+		//const fileName = e.target.value.substr(e.target.value.lastIndexOf("\\") + 1);
+		const fileName = e;
 
 		if (fileName) {
 
@@ -97,6 +105,61 @@ export default class SessionSharing extends SessionSharingBase {
 		}
 
 		return true;
+	}
+
+	getFileFromInput(fileInputRef) {
+
+		const fileName = fileInputRef.value.substr(fileInputRef.value.lastIndexOf("\\") + 1);
+		const file = fileInputRef.files[0];
+
+		this._readFile(fileName, file);
+
+		fileInputRef.value = null;
+	}
+
+	_readFile(fileName, file) {
+
+		if (file) {
+
+			const fileReader = new FileReader();
+
+			fileReader.onload = () => {
+
+				this._handleFileUpload(fileReader.result, fileName);
+			};
+
+			fileReader.onerror = () => {
+
+				console.error("file could not be read from fs!");
+			};
+
+			fileReader.readAsDataURL(file);
+		}
+	}
+
+	_handleFileUpload(fileAsBase64/*, fileName*/) {
+
+		const apigClient = apigClientFactory.newClient({
+			apiKey: "XisfDenhRE8OhMB4dHnkH2rBYSDR1XtC3sLkYnR0"
+		});
+
+		const fileToUploadAsBase64 = fileAsBase64.substr(fileAsBase64.indexOf(",") + 1);
+
+		const request = {
+			sessionId: this.state.sessionId,
+			data: fileToUploadAsBase64
+		};
+
+		return apigClient.updownerPut({}, request, {})
+			.then(result => {
+
+				console.log(result);
+				this._sendMsgToSrv();
+			})
+			.catch(err => {
+
+				console.error(err);
+			});
 	}
 
 	_handleMessage(name, state) {
@@ -207,7 +270,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 														<input
 															style={{display: "none"}}
-															onChange={this._sendMsgToSrv}
+															onChange={this.handleUploadFile}
 															id="incomeproof"
 															accept="application/pdf, image/tiff, image/jpeg"
 															type="file"

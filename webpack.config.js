@@ -7,8 +7,8 @@ module.exports = {
 	target: "web",
 
 	entry: {
-		"mothman": "./src/views/mothman.jsx",
-		"batman": "./src/views/batman.jsx"
+		mothman: "./src/views/mothman.jsx",
+		batman: "./src/views/batman.jsx"
 	},
 
 	node: {
