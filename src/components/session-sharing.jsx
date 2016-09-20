@@ -34,7 +34,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 		this.state.sessionId = currentUuid;
 
-		window.setInterval(this._rotateSessionId, 10 * 1000);
+		//window.setInterval(this._rotateSessionId, 10 * 1000);
 
 		this.init();
 	}
@@ -43,11 +43,14 @@ export default class SessionSharing extends SessionSharingBase {
 
 		if (!this.state.established) {
 
-			console.log("setting new session id");
+			const id = uuid.v4();
+			console.log("setting new session id", id);
 
 			this.setState({
-				sessionId: uuid.v4()
+				sessionId: id
 			});
+
+			this.init();
 		}
 
 	}
@@ -102,6 +105,7 @@ export default class SessionSharing extends SessionSharingBase {
 					console.log(err, data);
 				});
 
+			e.target.value = "";
 		}
 
 		return true;
