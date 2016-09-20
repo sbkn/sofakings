@@ -2,6 +2,7 @@ import React from "react";
 import SessionSharingBase from "./session-sharing-base.jsx";
 import uuid from "uuid";
 import FileInfo from "./FileInfo.jsx";
+import qrCode from "qrcode-npm";
 
 export default class SessionSharing extends SessionSharingBase {
 
@@ -24,7 +25,25 @@ export default class SessionSharing extends SessionSharingBase {
 			this.sessionId = uuid.v4();
 		}
 
+		this._generateQRCode(this.sessionId);
+
 		this.init();
+	}
+
+	_generateQRCode(sessionId) {
+
+		console.log(`Generating QR for ${sessionId}`);
+
+		const qr = qrCode.qrcode(4, "M");
+
+		qr.addData(sessionId);
+		qr.make();
+
+		const qrImg = qr.createImgTag(4);
+		const foo = qrImg.substr(qrImg.indexOf("\"") + 1);
+		const bar = foo.substr(0, foo.indexOf("\""));
+
+		this.setState({qrImgSrc: bar});
 	}
 
 	_getSessionIdFromUrl() {
