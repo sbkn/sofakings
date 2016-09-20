@@ -1,6 +1,6 @@
 import React from "react";
-import SessionSharingBase from "./session-sharing-base.jsx";
 import uuid from "uuid";
+import SessionSharingBase from "./session-sharing-base.jsx";
 import FileInfo from "./FileInfo.jsx";
 import SessionLink from "./SessionLink.jsx";
 
@@ -20,14 +20,34 @@ export default class SessionSharing extends SessionSharingBase {
 		super(props);
 
 		this._sendMsgToSrv = this._sendMsgToSrv.bind(this);
+		this._rotateSessionId = this._rotateSessionId.bind(this);
+
+		let currentUuid;
 
 		if (this.props.evaluateQueryString) {
-			this._getSessionIdFromUrl();
+			currentUuid = this._getSessionIdFromUrl();
 		} else {
-			this.sessionId = uuid.v4();
+			currentUuid = uuid.v4();
 		}
 
+		this.state.sessionId = currentUuid;
+
+		window.setInterval(this._rotateSessionId, 10 * 1000);
+
 		this.init();
+	}
+
+	_rotateSessionId() {
+
+		if (!this.state.established) {
+
+			console.log("setting new session id");
+
+			this.setState({
+				sessionId: uuid.v4()
+			});
+		}
+
 	}
 
 	componentDidMount() {
@@ -52,7 +72,7 @@ export default class SessionSharing extends SessionSharingBase {
 			throw new Error("no id in url found!")
 		}
 
-		this.sessionId = uuid;
+		return uuid;
 	}
 
 	_sendMsgToSrv(e) {
@@ -63,7 +83,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 		if (fileName) {
 
-			this.shadows.publish(this.sessionId,
+			this.shadows.publish(this.state.sessionId,
 				JSON.stringify({
 					fileName
 				}),
@@ -83,7 +103,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 		console.log("msg", name);
 
-		if (name === this.sessionId + "-established") {
+		if (name === this.state.sessionId + "-established") {
 
 			this.setState({
 				established: true,
@@ -149,7 +169,7 @@ export default class SessionSharing extends SessionSharingBase {
 											<SessionLink
 												established={this.state.established}
 												platform={this.state.platform}
-												sessionId={this.sessionId}/>
+												sessionId={this.state.sessionId}/>
 											: null
 									}
 

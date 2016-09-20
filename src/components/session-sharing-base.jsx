@@ -33,13 +33,13 @@ export default class SessionSharingBase extends React.Component {
 
 		if (!this.shadowsRegistered) {
 
-			this.shadows.subscribe(this.sessionId, {
+			this.shadows.subscribe(this.state.sessionId, {
 
 				persistentSubscribe: true,
 				qos: 0
 			});
 
-			this.shadows.subscribe(this.sessionId + "-established", {
+			this.shadows.subscribe(this.state.sessionId + "-established", {
 
 				persistentSubscribe: true,
 				qos: 0
@@ -48,8 +48,8 @@ export default class SessionSharingBase extends React.Component {
 			this.shadowsRegistered = true;
 		}
 
-		if (!this.state.showSessionLink) {
-			this.shadows.publish(this.sessionId + "-established",
+		if (!this.props.showSessionLink) {
+			this.shadows.publish(this.state.sessionId + "-established",
 				JSON.stringify({
 					platform: window.navigator.platform
 				}),

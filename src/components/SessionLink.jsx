@@ -9,6 +9,14 @@ export default class SessionLink extends React.Component {
 		platform: React.PropTypes.string
 	};
 
+	state = {};
+
+	constructor(props) {
+		super(props);
+
+		this.state.link = this.genLink();
+	}
+
 	static _getQRCodeSrc(url) {
 
 		const qr = qrCode.qrcode(10, "M");
@@ -21,12 +29,15 @@ export default class SessionLink extends React.Component {
 		return foo.substr(0, foo.indexOf("\""));
 	}
 
-	constructor(props) {
-		super(props);
+	genLink() {
+		return "http://" + window.location.host + "/batman.html?" + this.props.sessionId;
+	}
 
-		this.link = "http://" + window.location.host + "/batman.html?" + this.props.sessionId;
+	componentWillReceiveProps() {
 
-		this.qrImgSrc = SessionLink._getQRCodeSrc(this.link);
+		this.setState({
+			link: this.genLink()
+		});
 	}
 
 	render() {
@@ -34,11 +45,12 @@ export default class SessionLink extends React.Component {
 		return (
 			<div className="form-row form-row--halves">
 				<div className="form-row__item">
-					<img id="qrCode" src={this.qrImgSrc}/>
+					<img id="qrCode"
+						 src={SessionLink._getQRCodeSrc(this.state.link)}/>
 				</div>
 				<div className="form-row__item">
 					<a id="sessionLink" target="_blank"
-					   href={this.link}>
+					   href={this.state.link}>
 						Open Sender
 					</a>
 					<div>
