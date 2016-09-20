@@ -11,7 +11,9 @@ export default class SessionSharing extends SessionSharingBase {
 		showSessionLink: React.PropTypes.bool
 	};
 
-	state = {};
+	state = {
+		docs: []
+	};
 
 	constructor(props) {
 
@@ -157,7 +159,9 @@ export default class SessionSharing extends SessionSharingBase {
 													   href={"batman.html?" + this.sessionId}>
 														Session Link
 													</a>
-													<p>{this.sessionId}</p>
+													<p>
+														SessionId: {this.sessionId}
+													</p>
 												</div>
 											</div>
 											: null
@@ -191,6 +195,7 @@ export default class SessionSharing extends SessionSharingBase {
 															style={{minWidth: 167}}>
 															Datei hochladen
 														</label>
+
 														<input
 															style={{display: "none"}}
 															onChange={this._sendMsgToSrv}
@@ -198,6 +203,7 @@ export default class SessionSharing extends SessionSharingBase {
 															accept="application/pdf, image/tiff, image/jpeg"
 															type="file"
 															className="btn btn--secondary"/>
+
 													</div>
 												</div>
 											</div>
@@ -222,7 +228,12 @@ export default class SessionSharing extends SessionSharingBase {
 											<ul id="msgList"
 												className="list-bare">
 
-												<FileInfo/>
+												{
+													this.state.docs.map(doc => {
+														return <FileInfo
+															fileName={doc.fileName}/>
+													})
+												}
 
 											</ul>
 										</div>
