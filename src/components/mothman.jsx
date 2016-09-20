@@ -5,7 +5,7 @@ export default class Mothman extends Component {
 
 	render() {
 		return (
-			<SessionSharing />
+			<SessionSharing showSessionLink={true}/>
 		);
 	}
 }

@@ -9,7 +9,8 @@ export default class SessionSharing extends SessionSharingBase {
 	state = {};
 
 	static propTypes = {
-		evaluateQueryString: React.PropTypes.bool
+		evaluateQueryString: React.PropTypes.bool,
+		showSessionLink: React.PropTypes.bool
 	};
 
 	constructor(props) {
@@ -83,11 +84,18 @@ export default class SessionSharing extends SessionSharingBase {
 				<div className="container">
 					<h1>Sofa Kongs</h1>
 
-					<img id="qrCode" src={this.state.qrImgSrc}/>
+					{
+						this.props.showSessionLink ?
+							<div>
+								<img id="qrCode" src={this.state.qrImgSrc}/>
 
-					<a id="sessionLink" href={this.state.sessionLink}>
-						Session Link
-					</a>
+								<a id="sessionLink"
+								   href={this.state.sessionLink}>
+									Session Link
+								</a>
+							</div>
+							: null
+					}
 
 					<ul id="msgList"/>
 
