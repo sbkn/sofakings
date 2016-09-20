@@ -27,7 +27,7 @@ export default class SessionSharing extends SessionSharingBase {
 		let currentUuid;
 
 		if (this.props.evaluateQueryString) {
-			currentUuid = this._getSessionIdFromUrl();
+			currentUuid = SessionSharing._getSessionIdFromUrl();
 		} else {
 			currentUuid = uuid.v4();
 		}
@@ -61,7 +61,7 @@ export default class SessionSharing extends SessionSharingBase {
 		});
 	}
 
-	_getSessionIdFromUrl() {
+	static _getSessionIdFromUrl() {
 
 		let uuid = null;
 
@@ -85,22 +85,19 @@ export default class SessionSharing extends SessionSharingBase {
 		this.getFileFromInput(event.target);
 	}
 
-	_sendMsgToSrv(e) {
+	_sendMsgToSrv(frontEndFileId, upDownerResponse) {
 
-		//const fileName = e.target.value.substr(e.target.value.lastIndexOf("\\") + 1);
-		const fileName = e;
+		upDownerResponse.frontEndFileId = frontEndFileId;
 
-		if (fileName) {
+		this.shadows.publish(this.state.sessionId,
+			JSON.stringify(upDownerResponse),
+			{},
+			(err, data) => {
+				if (err) throw err;
 
-			this.shadows.publish(this.state.sessionId,
-				JSON.stringify(fileName),
-				{},
-				(err, data) => {
-					if (err) throw err;
+				console.log(err, data);
+			});
 
-					console.log(err, data);
-				});
-		}
 
 		return true;
 	}
@@ -135,13 +132,16 @@ export default class SessionSharing extends SessionSharingBase {
 		}
 	}
 
-	_handleFileUpload(fileAsBase64/*, fileName*/) {
+	_handleFileUpload(fileAsBase64, fileName) {
 
 		const apigClient = apigClientFactory.newClient({
 			apiKey: "XisfDenhRE8OhMB4dHnkH2rBYSDR1XtC3sLkYnR0"
 		});
 
 		const fileToUploadAsBase64 = fileAsBase64.substr(fileAsBase64.indexOf(",") + 1);
+		const frontEndFileId = uuid.v4();
+
+		this._addFileToList(fileName, frontEndFileId);
 
 		const request = {
 			sessionId: this.state.sessionId,
@@ -151,8 +151,8 @@ export default class SessionSharing extends SessionSharingBase {
 		return apigClient.updownerPut({}, request, {})
 			.then(result => {
 
-				console.log(result);
-				this._sendMsgToSrv(result);
+				console.log("UpDowner response", result.data);
+				this._sendMsgToSrv(frontEndFileId, result.data);
 			})
 			.catch(err => {
 
@@ -162,7 +162,9 @@ export default class SessionSharing extends SessionSharingBase {
 
 	_handleMessage(name, state) {
 
-		console.log("msg", name);
+		console.log("Received msg over IoT:");
+		console.log("name", name);
+		console.log("state", state);
 
 		if (name === this.state.sessionId + "-established") {
 
@@ -174,9 +176,11 @@ export default class SessionSharing extends SessionSharingBase {
 		else {
 			const docs = [...this.state.docs];
 
-			docs.push({
-				fileName: state.fileId
-			});
+			const obj = docs.filter(obj => {
+				return obj.frontEndFileId === state.frontEndFileId;
+			})[0];
+
+			obj.success = true;
 
 			this.setState({
 				docs
@@ -325,4 +329,17 @@ export default class SessionSharing extends SessionSharingBase {
 
 	}
 
+	_addFileToList(fileName, frontEndFileId) {
+
+		const docs = [...this.state.docs];
+
+		docs.push({
+			fileName,
+			frontEndFileId
+		});
+
+		this.setState({
+			docs
+		});
+	}
 }
