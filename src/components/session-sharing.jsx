@@ -97,6 +97,7 @@ export default class SessionSharing extends SessionSharingBase {
 					console.log(err, data);
 				});
 
+			e.target.value = "";
 		}
 
 		return true;
