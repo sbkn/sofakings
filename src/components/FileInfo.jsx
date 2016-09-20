@@ -3,8 +3,30 @@ import React from "react";
 export default class FileInfo extends React.Component {
 
 	static propTypes = {
-		fileName: React.PropTypes.string
+		fileName: React.PropTypes.string,
+		fileId: React.PropTypes.string,
+		deleteHandler: React.PropTypes.func
 	};
+
+	static defaultProps = {
+		fileName: "UNNAMED FILE",
+		fileId: null,
+		deleteHandler: null
+	};
+
+	constructor(props) {
+
+		super(props);
+		this._onDeleteClicked = this._onDeleteClicked.bind(this);
+
+	}
+
+	_onDeleteClicked() {
+
+		if (this.props.deleteHandler) {
+			this.props.deleteHandler(this.props.fileId);
+		}
+	}
 
 	render() {
 		return (
@@ -24,6 +46,7 @@ export default class FileInfo extends React.Component {
 					<div className="pl-tiny truncate-short-and-fixed">
 						<span >
 							<a href="#"
+							   onClick={this._onDeleteClicked}
 							   className="text-with-icon
 							   text-with-icon--error
 							   text-with-icon--trash

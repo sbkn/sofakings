@@ -25,6 +25,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 		this._sendMsgToSrv = this._sendMsgToSrv.bind(this);
 		this._handleUploadFile = this._handleUploadFile.bind(this);
+		this._deleteFileFromS3 = this._deleteFileFromS3.bind(this);
 
 		let currentUuid;
 
@@ -36,6 +37,10 @@ export default class SessionSharing extends SessionSharingBase {
 
 		this.state = {docs: []};
 		this.state.sessionId = currentUuid;
+
+		this.apigClient = apigClientFactory.newClient({
+			apiKey: "XisfDenhRE8OhMB4dHnkH2rBYSDR1XtC3sLkYnR0"
+		});
 
 		this.init();
 	}
@@ -99,9 +104,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 	_handleFileUpload(fileAsBase64, fileName) {
 
-		const apigClient = apigClientFactory.newClient({
-			apiKey: "XisfDenhRE8OhMB4dHnkH2rBYSDR1XtC3sLkYnR0"
-		});
+
 
 		const fileToUploadAsBase64 = fileAsBase64.substr(fileAsBase64.indexOf(",") + 1);
 		const frontEndFileId = uuid.v4();
@@ -114,7 +117,7 @@ export default class SessionSharing extends SessionSharingBase {
 			data: fileToUploadAsBase64
 		};
 
-		return apigClient.updownerPut({}, request, {})
+		return this.apigClient.updownerPut({}, request, {})
 			.then(result => {
 
 				console.log("UpDowner response", result.data);
@@ -189,6 +192,25 @@ export default class SessionSharing extends SessionSharingBase {
 		}
 
 		return uuid;
+	}
+
+	_deleteFileFromS3(backendFileId) {
+
+		const request = {
+			session_id: this.state.sessionId,
+			file_id: backendFileId
+		};
+
+		return this.apigClient.updownerSessionIdFileIdDelete(request, {}, {})
+			.then(() => {
+
+				console.log(`Deleted file sucessfully: ${backendFileId}`);
+				this._removeDocFromList(backendFileId);
+			})
+			.catch(err => {
+
+				console.error("Failed to delete: " + JSON.stringify(err, null, 2));
+			});
 	}
 
 	render() {
@@ -277,7 +299,9 @@ export default class SessionSharing extends SessionSharingBase {
 								this.state.docs.map(doc => {
 									return <FileInfo
 										key={Math.random().toString()}
-										fileName={doc.fileName}/>
+										fileName={doc.fileName}
+										fileId={doc.fileId}
+										deleteHandler={this._deleteFileFromS3}/>
 								})
 							}
 
@@ -290,4 +314,20 @@ export default class SessionSharing extends SessionSharingBase {
 
 	}
 
+	_removeDocFromList(backendFileId) {
+
+		const docs = [...this.state.docs];
+
+		const obj = docs.filter(obj => {
+			return obj.fileId === backendFileId;
+		})[0];
+
+		if (obj) {
+			docs.splice(docs.indexOf(obj), 1);
+		}
+
+		this.setState({
+			docs
+		});
+	}
 }
