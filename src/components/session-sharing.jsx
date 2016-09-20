@@ -2,20 +2,30 @@ import React from "react";
 import Button from "react-bootstrap/lib/Button";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import Jumbotron from "react-bootstrap/lib/Jumbotron";
-import AWSConfiguration from "../aws-configuration.es6";
 import SessionSharingBase from "./session-sharing-base.jsx";
 
 export default class SessionSharing extends SessionSharingBase {
 
 	state = {};
 
+	static propTypes = {
+		evaluateQueryString: React.PropTypes.bool
+	};
+
 	constructor(props) {
 
 		super(props);
 
-		this.shadowsRegistered = false;
-
 		this._sendMsgToSrv = this._sendMsgToSrv.bind(this);
+
+		if (this.props.evaluateQueryString) {
+			this._getIdFromUrl();
+		}
+
+		this.init();
+	}
+
+	_getIdFromUrl() {
 
 		let queryParamFromUrl = null;
 
@@ -27,24 +37,16 @@ export default class SessionSharing extends SessionSharingBase {
 
 		console.log("UUID IN URL:", queryParamFromUrl);
 
-		this.uuid = queryParamFromUrl || null;
+		if (!queryParamFromUrl) {
+			throw new Error("no id in url found!")
+		}
 
-		this.serverConnQuery = this.uuid ? this.uuid : Math.random().toString();
-
-		AWS.config.region = AWSConfiguration.region;
-
-		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-			IdentityPoolId: AWSConfiguration.poolId
-		});
-
-		this.init();
+		this.serverConnQuery = queryParamFromUrl;
 	}
 
 	_sendMsgToSrv(e) {
 
 		e.preventDefault();
-
-		const msg = document.getElementById("msgField").value;
 
 		if (msg) {
 
@@ -59,7 +61,6 @@ export default class SessionSharing extends SessionSharingBase {
 					console.log(err, data);
 				});
 
-			document.getElementById("msgField").value = "";
 		}
 
 		return true;
@@ -69,7 +70,7 @@ export default class SessionSharing extends SessionSharingBase {
 		return (
 			<Jumbotron className="text-center jumbotron-fluid">
 				<div className="container">
-					<h1>Sofa Kings</h1>
+					<h1>Sofa Kongs</h1>
 
 					<img id="qrCode" src={this.state.qrImgSrc}/>
 
@@ -81,8 +82,10 @@ export default class SessionSharing extends SessionSharingBase {
 
 					<form onSubmit={this._sendMsgToSrv}>
 						<FormGroup>
-							<input type="text" id="msgField"/>
+							<input type="file" onChange={this._sendMsgToSrv}
+								   id="fileUploadControl"/>
 						</FormGroup>
+
 						<Button type="submit">
 							Submit
 						</Button>

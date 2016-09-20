@@ -1,10 +1,23 @@
 import React from "react";
 import AWSIoTData from "../../libs/aws-iot-sdk-browser-bundle";
 import "aws-sdk";
+import AWSConfiguration from "../aws-configuration.es6";
 
 AWS = window.AWS;
 
 export default class SessionSharingBase extends React.Component {
+
+	constructor(props) {
+		super(props);
+
+		this.shadowsRegistered = false;
+
+		AWS.config.region = AWSConfiguration.region;
+
+		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+			IdentityPoolId: AWSConfiguration.poolId
+		});
+	}
 
 	init() {
 
