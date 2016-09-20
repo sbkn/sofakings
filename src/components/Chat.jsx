@@ -92,23 +92,6 @@ export default class Chat extends React.Component {
 			msgList.appendChild(newElemInList);
 		});
 
-		this.shadows.on('delta', (name, stateObject) => {
-
-			console.log("delta", stateObject, name);
-
-			if (name === 'vwfs-dmks-prodi-session-sharing-thing') {
-
-				document.getElementById('temperature-monitor-div').innerHTML = '<p>interior: ' + stateObject.state.intTemp + '</p>' +
-					'<p>exterior: ' + stateObject.state.extTemp + '</p>' +
-					'<p>state: ' + stateObject.state.curState + '</p>';
-
-			} else { // name === 'TemperatureControl'
-				var enabled = stateObject.state.enabled ? 'enabled' : 'disabled';
-				document.getElementById('temperature-control-div').innerHTML = '<p>setpoint: ' + stateObject.state.setPoint + '</p>' +
-					'<p>mode: ' + enabled + '</p>';
-			}
-		});
-
 		this.shadows.on('status', (name, statusType, clientToken, stateObject) => {
 
 			console.log("status", stateObject, statusType);
