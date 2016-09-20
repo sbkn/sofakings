@@ -3,8 +3,7 @@ import React from "react";
 export default class bla extends React.Component {
 
 	static propTypes = {
-		fileName: React.PropTypes.string,
-		showSessionLink: React.PropTypes.bool
+		fileName: React.PropTypes.string
 	};
 
 	render() {
@@ -17,7 +16,7 @@ export default class bla extends React.Component {
 			                                        text-with-icon--narrow
 			                                        text-with-icon--large
 			                                        truncate-long-and-truncated-with-child-corrected text-with-icon--pdf">
-						<span>Giro_Bed_MFG_15_23.pdf</span>
+						<span>{this.props.fileName}</span>
 					</span>
 
 					<div className="pl-tiny truncate-short-and-fixed">

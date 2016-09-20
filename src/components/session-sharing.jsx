@@ -43,7 +43,9 @@ export default class SessionSharing extends SessionSharingBase {
 	}
 
 	componentDidMount() {
-		this.setState({qrImgSrc: this.qrImgSrc});
+		this.setState({
+			qrImgSrc: this.qrImgSrc
+		});
 	}
 
 	_getSessionIdFromUrl() {
@@ -141,17 +143,20 @@ export default class SessionSharing extends SessionSharingBase {
 
 									{
 										this.props.showSessionLink ?
-											<div>
-												<img id="qrCode"
-													 src={this.state.qrImgSrc}
-													 alt="QRCODE"/>
-
-												<a id="sessionLink"
-												   target="_blank"
-												   href={"batman.html?" + this.sessionId}>
-													Session Link
-												</a>
-												<p>{this.sessionId}</p>
+											<div
+												className="form-row form-row--halves">
+												<div className="form-row__item">
+													<img id="qrCode"
+														 src={this.state.qrImgSrc}/>
+												</div>
+												<div className="form-row__item">
+													<a id="sessionLink"
+													   target="_blank"
+													   href={"batman.html?" + this.sessionId}>
+														Session Link
+													</a>
+													<p>{this.sessionId}</p>
+												</div>
 											</div>
 											: null
 									}
