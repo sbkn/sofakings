@@ -48,16 +48,18 @@ export default class SessionSharingBase extends React.Component {
 			this.shadowsRegistered = true;
 		}
 
-		this.shadows.publish(this.sessionId + "-established",
-			JSON.stringify({
-				platform: window.navigator.platform
-			}),
-			{},
-			(err, data) => {
-				if (err) throw err;
+		if (!this.state.showSessionLink) {
+			this.shadows.publish(this.sessionId + "-established",
+				JSON.stringify({
+					platform: window.navigator.platform
+				}),
+				{},
+				(err, data) => {
+					if (err) throw err;
 
-				console.log(err, data);
-			});
+					console.log(err, data);
+				});
+		}
 	}
 
 	shadowReconnectHandler() {

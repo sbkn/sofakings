@@ -47,10 +47,14 @@ export default class SessionLink extends React.Component {
 
 						{
 							this.props.established ?
-								<div
-									className="icon-teaser-box__icon text-center col-6/12 col-1/1@m">
-									<i className="icon icon--checkmark"/>
-									{this.props.platform}
+								<div>
+									<div
+										className="icon-teaser-box__icon text-center col-1/12 col-1/1@m">
+										<i className="icon icon--checkmark"/>
+									</div>
+									<div>
+										{this.props.platform}
+									</div>
 								</div>
 								: null
 						}
