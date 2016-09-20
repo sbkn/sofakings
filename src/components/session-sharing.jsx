@@ -21,8 +21,7 @@ export default class SessionSharing extends SessionSharingBase {
 		super(props);
 
 		this._sendMsgToSrv = this._sendMsgToSrv.bind(this);
-		this.handleUploadFile = this.handleUploadFile.bind(this);
-		this._rotateSessionId = this._rotateSessionId.bind(this);
+		this._handleUploadFile = this._handleUploadFile.bind(this);
 
 		let currentUuid;
 
@@ -34,25 +33,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 		this.state.sessionId = currentUuid;
 
-		//window.setInterval(this._rotateSessionId, 10 * 1000);
-
 		this.init();
-	}
-
-	_rotateSessionId() {
-
-		if (!this.state.established) {
-
-			const id = uuid.v4();
-			console.log("setting new session id", id);
-
-			this.setState({
-				sessionId: id
-			});
-
-			this.init();
-		}
-
 	}
 
 	componentDidMount() {
@@ -80,9 +61,9 @@ export default class SessionSharing extends SessionSharingBase {
 		return uuid;
 	}
 
-	handleUploadFile(event) {
+	_handleUploadFile(event) {
 
-		this.getFileFromInput(event.target);
+		this._getFileFromInput(event.target);
 	}
 
 	_sendMsgToSrv(frontEndFileId, upDownerResponse) {
@@ -101,7 +82,7 @@ export default class SessionSharing extends SessionSharingBase {
 		return true;
 	}
 
-	getFileFromInput(fileInputRef) {
+	_getFileFromInput(fileInputRef) {
 
 		const fileName = fileInputRef.value.substr(fileInputRef.value.lastIndexOf("\\") + 1);
 		const file = fileInputRef.files[0];
@@ -276,7 +257,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 														<input
 															style={{display: "none"}}
-															onChange={this.handleUploadFile}
+															onChange={this._handleUploadFile}
 															id="incomeproof"
 															accept="application/pdf, image/tiff, image/jpeg"
 															type="file"
@@ -285,24 +266,6 @@ export default class SessionSharing extends SessionSharingBase {
 													</div>
 												</div>
 											</div>
-										</div>
-										<div className="form-row__item
-										form-row__item--tooltip">
-
-											<p className="form-tooltip
-											info-box
-											js-form-tooltip mb@s">
-												Es können bis zu drei
-												Dateien
-												vom
-												Typ
-												JPG,
-												PDF und
-												TIFF mit einer Größe von bis
-												zu
-												4,5
-												MB
-												hochgeladen werden.</p>
 										</div>
 
 										<div className="form-row__item">
