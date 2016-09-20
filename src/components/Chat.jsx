@@ -2,8 +2,8 @@ import React from "react";
 import Button from "react-bootstrap/lib/Button";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import Jumbotron from "react-bootstrap/lib/Jumbotron";
-import AWSConfiguration from "./aws-configuration.es6";
-import AWSIoTData from "../libs/aws-iot-sdk-browser-bundle";
+import AWSConfiguration from "../aws-configuration.es6";
+import AWSIoTData from "../../libs/aws-iot-sdk-browser-bundle";
 import "aws-sdk";
 
 AWS = window.AWS;

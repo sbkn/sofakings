@@ -2,27 +2,32 @@ var path = require("path");
 var webpack = require("webpack");
 
 module.exports = {
+
 	devtool: "eval",
 	target: "web",
-	entry: [
-		"webpack-dev-server/client?http://localhost:8080",
-		"webpack/hot/only-dev-server",
-		"./src/index.jsx"
-	],
+
+	entry: {
+		"mothman": "./src/views/mothman.jsx",
+		"batman": "./src/views/batman.jsx"
+	},
+
 	node: {
 		fs: "empty",
 		tls: "empty"
 	},
+
 	output: {
 		path: path.join(__dirname, "dist"),
-		filename: "bundle.js",
+		filename: "[name].js",
 		publicPath: "/static/"
 	},
+
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin()
 	],
+
 	module: {
 		loaders: [
 			{
@@ -36,6 +41,7 @@ module.exports = {
 			/libs/
 		]
 	},
+
 	resolve: {
 		alias: {
 			"aws-sdk": "aws-sdk/dist/aws-sdk.min.js"
