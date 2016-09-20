@@ -274,7 +274,24 @@ export default class SessionSharing extends SessionSharingBase {
 												</div>
 											</div>
 										</div>
+										<div className="form-row__item
+										form-row__item--tooltip">
 
+											<p className="form-tooltip
+											info-box
+											js-form-tooltip mb@s">
+												Es können bis zu drei
+												Dateien
+												vom
+												Typ
+												JPG,
+												PDF und
+												TIFF mit einer Größe von bis
+												zu
+												4,5
+												MB
+												hochgeladen werden.</p>
+										</div>
 										<div className="form-row__item">
 											<ul id="msgList"
 												className="list-bare">
