@@ -3,15 +3,16 @@ import Button from "react-bootstrap/lib/Button";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import Jumbotron from "react-bootstrap/lib/Jumbotron";
 import SessionSharingBase from "./session-sharing-base.jsx";
+import uuid from "uuid";
 
 export default class SessionSharing extends SessionSharingBase {
-
-	state = {};
 
 	static propTypes = {
 		evaluateQueryString: React.PropTypes.bool,
 		showSessionLink: React.PropTypes.bool
 	};
+
+	state = {};
 
 	constructor(props) {
 
@@ -20,29 +21,31 @@ export default class SessionSharing extends SessionSharingBase {
 		this._sendMsgToSrv = this._sendMsgToSrv.bind(this);
 
 		if (this.props.evaluateQueryString) {
-			this._getIdFromUrl();
+			this._getSessionIdFromUrl();
+		} else {
+			this.sessionId = uuid.v4();
 		}
 
 		this.init();
 	}
 
-	_getIdFromUrl() {
+	_getSessionIdFromUrl() {
 
-		let queryParamFromUrl = null;
+		let uuid = null;
 
 		if (window.location.href.indexOf("?") > -1) {
-			queryParamFromUrl = window.location.href.slice(
+			uuid = window.location.href.slice(
 				window.location.href.indexOf("?") + 1
 			);
 		}
 
-		console.log("UUID IN URL:", queryParamFromUrl);
+		console.log("UUID IN URL:", uuid);
 
-		if (!queryParamFromUrl) {
+		if (!uuid) {
 			throw new Error("no id in url found!")
 		}
 
-		this.serverConnQuery = queryParamFromUrl;
+		this.sessionId = uuid;
 	}
 
 	_sendMsgToSrv(e) {
@@ -53,7 +56,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 		if (fileName) {
 
-			this.shadows.publish(this.serverConnQuery,
+			this.shadows.publish(this.sessionId,
 				JSON.stringify({
 					fileName
 				}),
@@ -79,6 +82,7 @@ export default class SessionSharing extends SessionSharingBase {
 	}
 
 	render() {
+
 		return (
 			<Jumbotron className="text-center jumbotron-fluid">
 				<div className="container">
@@ -93,6 +97,7 @@ export default class SessionSharing extends SessionSharingBase {
 								   href={this.state.sessionLink}>
 									Session Link
 								</a>
+								<p>{this.sessionId}</p>
 							</div>
 							: null
 					}
@@ -112,6 +117,7 @@ export default class SessionSharing extends SessionSharingBase {
 				</div>
 			</Jumbotron>
 		);
+
 	}
 
 }

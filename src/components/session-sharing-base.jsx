@@ -7,8 +7,12 @@ AWS = window.AWS;
 
 export default class SessionSharingBase extends React.Component {
 
+
 	constructor(props) {
 		super(props);
+
+		this.shadowConnectHandler = this.shadowConnectHandler.bind(this);
+		this.shadowReconnectHandler = this.shadowReconnectHandler.bind(this);
 
 		this.shadowsRegistered = false;
 
@@ -22,6 +26,27 @@ export default class SessionSharingBase extends React.Component {
 	_handleMessage(name, state) {
 
 		return null;
+	}
+
+	shadowConnectHandler() {
+		console.log('connect');
+
+		if (!this.shadowsRegistered) {
+
+			this.shadows.subscribe(this.sessionId, {
+
+				persistentSubscribe: true,
+				qos: 0
+			});
+
+			this.shadowsRegistered = true;
+		}
+
+		console.log(this.shadowsRegistered, this.shadows);
+	}
+
+	shadowReconnectHandler() {
+		console.log('reconnect');
 	}
 
 	init() {
@@ -90,29 +115,9 @@ export default class SessionSharingBase extends React.Component {
 			}
 		});
 
-		window.shadowConnectHandler = () => {
-			console.log('connect');
+		this.shadows.on('connect', this.shadowConnectHandler);
 
-			if (!this.shadowsRegistered) {
-
-				this.shadows.subscribe(this.serverConnQuery, {
-
-					persistentSubscribe: true,
-					qos: 0
-				});
-
-				this.shadowsRegistered = true;
-			}
-
-			console.log(this.shadowsRegistered, this.shadows);
-		};
-
-		window.shadowReconnectHandler = () => {
-			console.log('reconnect');
-		};
-
-		this.shadows.on('connect', window.shadowConnectHandler);
-		this.shadows.on('reconnect', window.shadowReconnectHandler);
+		this.shadows.on('reconnect', this.shadowReconnectHandler);
 
 		var cognitoIdentity = new AWS.CognitoIdentity();
 		AWS.config.credentials.get((err, data) => {
