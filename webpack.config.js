@@ -33,8 +33,7 @@ module.exports = {
 		],
 		noParse: [
 			/aws\-sdk/,
-			/aws\-iot\-device\-sdk/
-
+			/libs/
 		]
 	},
 	resolve: {

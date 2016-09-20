@@ -3,7 +3,7 @@ import Button from "react-bootstrap/lib/Button";
 import FormGroup from "react-bootstrap/lib/FormGroup";
 import Jumbotron from "react-bootstrap/lib/Jumbotron";
 import AWSConfiguration from "./aws-configuration.es6";
-import AWSIoTData from "aws-iot-device-sdk/browser/aws-iot-sdk-browser-bundle";
+import AWSIoTData from "../libs/aws-iot-sdk-browser-bundle";
 import "aws-sdk";
 
 AWS = window.AWS;
@@ -11,8 +11,6 @@ AWS = window.AWS;
 export default class Chat extends React.Component {
 
 	state = {};
-
-	static topic = "hans";
 
 	constructor(props) {
 
@@ -34,9 +32,7 @@ export default class Chat extends React.Component {
 
 		this.uuid = queryParamFromUrl || null;
 
-		const serverConnQuery = this.uuid ? {
-			query: "uuid=" + this.uuid
-		} : null;
+		this.serverConnQuery = this.uuid ? this.uuid : Math.random().toString();
 
 		AWS.config.region = AWSConfiguration.region;
 
@@ -59,7 +55,7 @@ export default class Chat extends React.Component {
 			//
 			// Use a random client ID.
 			//
-			clientId: "2",
+			clientId: Math.random().toString(),
 			//
 			// Connect via secure WebSocket
 			//
@@ -94,7 +90,6 @@ export default class Chat extends React.Component {
 			newElemInList.innerHTML = stateObject.msg;
 
 			msgList.appendChild(newElemInList);
-
 		});
 
 		this.shadows.on('delta', function (name, stateObject) {
@@ -154,7 +149,7 @@ export default class Chat extends React.Component {
 
 			if (!this.shadowsRegistered) {
 
-				this.shadows.subscribe(Chat.topic, {
+				this.shadows.subscribe(this.serverConnQuery, {
 
 					persistentSubscribe: true,
 					qos: 0
@@ -214,7 +209,7 @@ export default class Chat extends React.Component {
 
 		if (msg) {
 
-			this.shadows.publish(Chat.topic,
+			this.shadows.publish(this.serverConnQuery,
 				JSON.stringify({
 					msg
 				}),
