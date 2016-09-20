@@ -183,139 +183,98 @@ export default class SessionSharing extends SessionSharingBase {
 	render() {
 
 		return (
-			<div className="root">
-				<main>
-					<div className="page-wrap">
-						<div
-							className="js-step-container content-wrap bg-neutral"
-							id="page-personal">
-							<form>
+			<fieldset className="form-row form-row--whole">
 
-								<fieldset
-									className="form-row form-row--whole">
-									<div className="form-row__labels mb">
-										<div className="form-row__item">
-											<strong>
-												<span>{ this.props.pageTitle }</span>
-											</strong>
-											<p className="mb-none">Für die
-												Einrichtung
-												eines
-												Dispositionskredites und
-												Verfügungsrahmens
-												zur VISA Card pur benötigen
-												wir
-												von
-												Ihnen
-												einen aktuellen
-												Einkommensnachweis
-												(z.B.
-												die
-												letzte Gehaltsabrechnung).
-												Den
-												Einkommensnachweis können
-												Sie
-												direkt
-												hier
-												hochladen.</p>
-										</div>
+				<div className="form-row__labels mb">
+					<div className="form-row__item">
+						<strong>
+							<span>{ this.props.pageTitle }</span>
+						</strong>
+						<p className="mb-none">Für die
+							Einrichtung eines Dispositionskredites und
+							Verfügungsrahmens zur VISA Card pur benötigen wir
+							von Ihnen einen aktuellen Einkommensnachweis
+							(z.B. die letzte Gehaltsabrechnung). Den
+							Einkommensnachweis können Sie direkt
+							hier hochladen.
+						</p>
+					</div>
+				</div>
+
+				{
+					this.props.showSessionLink ?
+						<SessionLink
+							established={this.state.established}
+							platform={this.state.platform}
+							sessionId={this.state.sessionId}/>
+						: null
+				}
+
+				<div className="form-row__inputs mb">
+					<div className="form-row__item">
+						<div>
+							<div className="icon-teaser-box
+								mb-small"
+								 id="dropzone">
+								<div className="icon-teaser-box__icon
+									text-center
+									col-3/12
+									col-1/1@m">
+
+									<i className="icon icon--upload-outline"/>
+								</div>
+								<div className="col-9/12
+									col-1/1@m">
+
+									<div className="icon-teaser-box__text">
+										<p>Datei zum Hochladen auswählen.</p>
 									</div>
 
-									{
-										this.props.showSessionLink ?
-											<SessionLink
-												established={this.state.established}
-												platform={this.state.platform}
-												sessionId={this.state.sessionId}/>
-											: null
-									}
+									<label htmlFor="incomeproof"
+										   id="uploadbutton"
+										   className="btn btn--secondary"
+										   style={{minWidth: 167}}>
+										Datei hochladen
+									</label>
 
-									<div className="form-row__inputs mb">
-										<div className="form-row__item">
-											<div>
-												<div className="icon-teaser-box
-												mb-small"
-													 id="dropzone">
-													<div className="icon-teaser-box__icon
-														text-center
-														col-3/12
-														col-1/1@m">
+									<input style={{display: "none"}}
+										   onChange={this._handleUploadFile}
+										   id="incomeproof" type="file"
+										   accept="application/pdf, image/tiff, image/jpeg"
+										   className="btn btn--secondary"/>
 
-														<i className="icon icon--upload-outline"/>
-													</div>
-													<div className="col-9/12
-													col-1/1@m">
-														<div
-															className="icon-teaser-box__text">
-
-															<p>Datei zum
-																Hochladen
-																auswählen.</p>
-
-														</div>
-
-														<label
-															htmlFor="incomeproof"
-															id="uploadbutton"
-															className="btn btn--secondary"
-															style={{minWidth: 167}}>
-															Datei hochladen
-														</label>
-
-														<input
-															style={{display: "none"}}
-															onChange={this._handleUploadFile}
-															id="incomeproof"
-															accept="application/pdf, image/tiff, image/jpeg"
-															type="file"
-															className="btn btn--secondary"/>
-
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="form-row__item
-										form-row__item--tooltip">
-
-											<p className="form-tooltip
-											info-box
-											js-form-tooltip mb@s">
-												Es können bis zu drei
-												Dateien
-												vom
-												Typ
-												JPG,
-												PDF und
-												TIFF mit einer Größe von bis
-												zu
-												4,5
-												MB
-												hochgeladen werden.</p>
-										</div>
-										<div className="form-row__item">
-											<ul id="msgList"
-												className="list-bare">
-
-												{
-													this.state.docs.map(doc => {
-														return <FileInfo
-															key={Math.random().toString()}
-															fileName={doc.fileName}/>
-													})
-												}
-
-											</ul>
-										</div>
-
-									</div>
-								</fieldset>
-
-							</form>
+								</div>
+							</div>
 						</div>
 					</div>
-				</main>
-			</div>
+					<div className="form-row__item
+						form-row__item--tooltip">
 
+						<p className="form-tooltip
+							info-box
+							js-form-tooltip mb@s">
+							Es können bis zu drei Dateien vom Typ JPG, PDF und
+							TIFF mit einer Größe von bis zu 4,5 MB hochgeladen
+							werden.
+						</p>
+					</div>
+					<div className="form-row__item">
+						<ul id="msgList"
+							className="list-bare">
+
+							{
+								this.state.docs.map(doc => {
+									return <FileInfo
+										key={Math.random().toString()}
+										fileName={doc.fileName}/>
+								})
+							}
+
+						</ul>
+					</div>
+				</div>
+
+			</fieldset>
 		);
 
 	}
