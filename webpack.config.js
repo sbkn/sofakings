@@ -25,6 +25,7 @@ module.exports = {
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
+		new webpack.IgnorePlugin(/vertx/),
 		new webpack.NoErrorsPlugin()
 	],
 
@@ -38,7 +39,7 @@ module.exports = {
 		],
 		noParse: [
 			/aws\-sdk/,
-			/libs/
+			/aws\-iot\-sdk/
 		]
 	},
 

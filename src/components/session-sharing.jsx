@@ -3,7 +3,7 @@ import uuid from "uuid";
 import SessionSharingBase from "./session-sharing-base.jsx";
 import FileInfo from "./FileInfo.jsx";
 import SessionLink from "./SessionLink.jsx";
-import apigClientFactory from "../../libs/api-client-loader.es6";
+import apigClientFactory from "../api-client-loader.es6";
 
 export default class SessionSharing extends SessionSharingBase {
 
@@ -87,25 +87,19 @@ export default class SessionSharing extends SessionSharingBase {
 
 	_sendMsgToSrv(e) {
 
-		e.preventDefault();
-
 		//const fileName = e.target.value.substr(e.target.value.lastIndexOf("\\") + 1);
 		const fileName = e;
 
 		if (fileName) {
 
 			this.shadows.publish(this.state.sessionId,
-				JSON.stringify({
-					fileName
-				}),
+				JSON.stringify(fileName),
 				{},
 				(err, data) => {
 					if (err) throw err;
 
 					console.log(err, data);
 				});
-
-			e.target.value = "";
 		}
 
 		return true;
@@ -158,7 +152,7 @@ export default class SessionSharing extends SessionSharingBase {
 			.then(result => {
 
 				console.log(result);
-				this._sendMsgToSrv();
+				this._sendMsgToSrv(result);
 			})
 			.catch(err => {
 
@@ -181,7 +175,7 @@ export default class SessionSharing extends SessionSharingBase {
 			const docs = [...this.state.docs];
 
 			docs.push({
-				fileName: state.fileName
+				fileName: state.fileId
 			});
 
 			this.setState({
