@@ -25,14 +25,12 @@ export default class SessionSharing extends SessionSharingBase {
 			this.sessionId = uuid.v4();
 		}
 
-		this._generateQRCode(this.sessionId);
+		this.qrImgSrc = SessionSharing._getQRCodeSrc(this.sessionId);
 
 		this.init();
 	}
 
-	_generateQRCode(sessionId) {
-
-		console.log(`Generating QR for ${sessionId}`);
+	static _getQRCodeSrc(sessionId) {
 
 		const qr = qrCode.qrcode(4, "M");
 
@@ -41,7 +39,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 		const qrImg = qr.createImgTag(4);
 		const foo = qrImg.substr(qrImg.indexOf("\"") + 1);
-		this.qrImgSrc = foo.substr(0, foo.indexOf("\""));
+		return foo.substr(0, foo.indexOf("\""));
 	}
 
 	componentDidMount() {
