@@ -115,11 +115,6 @@ export default class SessionSharing extends SessionSharingBase {
 										<div className="form-row__item">
 											<strong>
 												<span>Einkommensnachweis hochladen</span>
-												(optional)
-												<button title="Erläuterung"
-														className="js-open-form-tooltip info-icon">
-													i
-												</button>
 											</strong>
 											<p className="mb-none">Für die
 												Einrichtung
@@ -144,27 +139,21 @@ export default class SessionSharing extends SessionSharingBase {
 										</div>
 									</div>
 
-									<div className="container">
+									{
+										this.props.showSessionLink ?
+											<div>
+												<img id="qrCode"
+													 src={this.state.qrImgSrc}/>
 
-										{
-											this.props.showSessionLink ?
-												<div>
-													<img id="qrCode"
-														 src={this.state.qrImgSrc}/>
-
-													<a id="sessionLink"
-													   target="_blank"
-													   href={"batman.html?" + this.sessionId}>
-														Session Link
-													</a>
-													<p>{this.sessionId}</p>
-												</div>
-												: null
-										}
-
-										<ul id="msgList"/>
-
-									</div>
+												<a id="sessionLink"
+												   target="_blank"
+												   href={"batman.html?" + this.sessionId}>
+													Session Link
+												</a>
+												<p>{this.sessionId}</p>
+											</div>
+											: null
+									}
 
 									<div className="form-row__inputs mb">
 										<div className="form-row__item">
@@ -222,7 +211,7 @@ export default class SessionSharing extends SessionSharingBase {
 										</div>
 
 										<div className="form-row__item">
-											<ul id="documentlist"
+											<ul id="msgList"
 												className="list-bare">
 
 												<FileInfo/>
