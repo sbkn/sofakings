@@ -25,16 +25,18 @@ export default class SessionSharing extends SessionSharingBase {
 			this.sessionId = uuid.v4();
 		}
 
-		this.qrImgSrc = SessionSharing._getQRCodeSrc(this.sessionId);
+		this.qrImgSrc = SessionSharing._getQRCodeSrc(
+			window.location.href + "?" + this.sessionId
+		);
 
 		this.init();
 	}
 
-	static _getQRCodeSrc(sessionId) {
+	static _getQRCodeSrc(url) {
 
-		const qr = qrCode.qrcode(4, "M");
+		const qr = qrCode.qrcode(10, "M");
 
-		qr.addData(sessionId);
+		qr.addData(url);
 		qr.make();
 
 		const qrImg = qr.createImgTag(4);
