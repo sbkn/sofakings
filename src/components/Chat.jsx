@@ -92,7 +92,7 @@ export default class Chat extends React.Component {
 			msgList.appendChild(newElemInList);
 		});
 
-		this.shadows.on('delta', function (name, stateObject) {
+		this.shadows.on('delta', (name, stateObject) => {
 
 			console.log("delta", stateObject, name);
 
@@ -109,17 +109,12 @@ export default class Chat extends React.Component {
 			}
 		});
 
-		this.shadows.on('status', function (name, statusType, clientToken, stateObject) {
+		this.shadows.on('status', (name, statusType, clientToken, stateObject) => {
 
 			console.log("status", stateObject, statusType);
 
 			if (statusType === 'rejected') {
-				//
-				// If an operation is rejected it is likely due to a version conflict;
-				// request the latest version so that we synchronize with the shadow
-				// The most notable exception to this is if the thing shadow has not
-				// yet been created or has been deleted.
-				//
+
 				if (stateObject.code !== 404) {
 
 					console.log('resync with thing shadow');
@@ -132,15 +127,6 @@ export default class Chat extends React.Component {
 				}
 			} else { // statusType === 'accepted'
 
-				if (name === 'vwfs-dmks-prodi-session-sharing-thing') {
-					document.getElementById('temperature-monitor-div').innerHTML = '<p>interior: ' + stateObject.state.desired.intTemp + '</p>' +
-						'<p>exterior: ' + stateObject.state.desired.extTemp + '</p>' +
-						'<p>state: ' + stateObject.state.desired.curState + '</p>';
-				} else { // name === 'TemperatureControl'
-					var enabled = stateObject.state.desired.enabled ? 'enabled' : 'disabled';
-					document.getElementById('temperature-control-div').innerHTML = '<p>setpoint: ' + stateObject.state.desired.setPoint + '</p>' +
-						'<p>    mode: ' + enabled + '</p>';
-				}
 			}
 		});
 
@@ -160,7 +146,7 @@ export default class Chat extends React.Component {
 
 			console.log(this.shadowsRegistered, this.shadows);
 		};
-		window.shadowReconnectHandler = function () {
+		window.shadowReconnectHandler = () => {
 			console.log('reconnect');
 		};
 
@@ -189,14 +175,12 @@ export default class Chat extends React.Component {
 					} else {
 
 						console.log('error retrieving credentials: ' + err);
-						alert('error retrieving credentials: ' + err);
 					}
 				});
 
 			} else {
 
 				console.log('error retrieving identity:' + err);
-				alert('error retrieving identity: ' + err);
 			}
 		});
 	}
@@ -233,11 +217,12 @@ export default class Chat extends React.Component {
 					<h1>Sofa Kings</h1>
 
 					<img id="qrCode" src={this.state.qrImgSrc}/>
+
 					<a id="sessionLink" href={this.state.sessionLink}>
 						Session Link
 					</a>
 
-					<ul id="msgList"></ul>
+					<ul id="msgList"/>
 
 					<form onSubmit={this._sendMsgToSrv}>
 						<FormGroup>
