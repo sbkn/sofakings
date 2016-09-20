@@ -25,6 +25,8 @@ module.exports = {
 
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
+		new webpack.optimize.UglifyJsPlugin(),
+		new webpack.optimize.DedupePlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.IgnorePlugin(/vertx/),
 		new webpack.NoErrorsPlugin()
