@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Batman from "../components/batman.jsx";
+import SessionSharing from "../components/session-sharing.jsx";
 
-ReactDOM.render(<Batman />,
+ReactDOM.render(
+	<SessionSharing showSessionLink={false} evaluateQueryString={true}/>,
 	document.getElementById("root")
 );

@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Mothman from "../components/mothman.jsx";
+import SessionSharing from "../components/session-sharing.jsx";
 
-ReactDOM.render(<Mothman />,
+ReactDOM.render(
+	<SessionSharing showSessionLink={true}/>,
 	document.getElementById("root")
 );
