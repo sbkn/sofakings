@@ -5,7 +5,7 @@ export default class Batman extends Component {
 
 	render() {
 		return (
-			<SessionSharing evaluateQueryString={true}/>
+			<SessionSharing showSessionLink={false} evaluateQueryString={true}/>
 		);
 	}
 }
