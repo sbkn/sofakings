@@ -1,9 +1,7 @@
 import React from "react";
-import Button from "react-bootstrap/lib/Button";
-import FormGroup from "react-bootstrap/lib/FormGroup";
-import Jumbotron from "react-bootstrap/lib/Jumbotron";
 import SessionSharingBase from "./session-sharing-base.jsx";
 import uuid from "uuid";
+import FileInfo from "./FileInfo.jsx";
 
 export default class SessionSharing extends SessionSharingBase {
 
@@ -84,39 +82,144 @@ export default class SessionSharing extends SessionSharingBase {
 	render() {
 
 		return (
-			<Jumbotron className="text-center jumbotron-fluid">
-				<div className="container">
-					<h1>Sofa Kings</h1>
+			<div className="root">
+				<main>
+					<div className="page-wrap">
+						<div
+							className="js-step-container content-wrap bg-neutral"
+							id="page-personal">
+							<form>
 
-					{
-						this.props.showSessionLink ?
-							<div>
-								<img id="qrCode" src={this.state.qrImgSrc}/>
+								<fieldset
+									className="form-row form-row--whole">
+									<div className="form-row__labels mb">
+										<div className="form-row__item">
+											<strong>
+												<span>Einkommensnachweis hochladen</span>
+												(optional)
+												<button title="Erläuterung"
+														className="js-open-form-tooltip info-icon">
+													i
+												</button>
+											</strong>
+											<p className="mb-none">Für die
+												Einrichtung
+												eines
+												Dispositionskredites und
+												Verfügungsrahmens
+												zur VISA Card pur benötigen
+												wir
+												von
+												Ihnen
+												einen aktuellen
+												Einkommensnachweis
+												(z.B.
+												die
+												letzte Gehaltsabrechnung).
+												Den
+												Einkommensnachweis können
+												Sie
+												direkt
+												hier
+												hochladen.</p>
+										</div>
+									</div>
 
-								<a id="sessionLink"
-								   target="_blank"
-								   href={"batman.html?" + this.sessionId}>
-									Session Link
-								</a>
-								<p>{this.sessionId}</p>
-							</div>
-							: null
-					}
+									<div className="container">
 
-					<ul id="msgList"/>
+										{
+											this.props.showSessionLink ?
+												<div>
+													<img id="qrCode"
+														 src={this.state.qrImgSrc}/>
 
-					<form onSubmit={this._sendMsgToSrv}>
-						<FormGroup>
-							<input type="file" onChange={this._sendMsgToSrv}
-								   id="fileUploadControl"/>
-						</FormGroup>
+													<a id="sessionLink"
+													   target="_blank"
+													   href={"batman.html?" + this.sessionId}>
+														Session Link
+													</a>
+													<p>{this.sessionId}</p>
+												</div>
+												: null
+										}
 
-						<Button type="submit">
-							Submit
-						</Button>
-					</form>
-				</div>
-			</Jumbotron>
+										<ul id="msgList"/>
+
+									</div>
+
+									<div className="form-row__inputs mb">
+										<div className="form-row__item">
+											<div>
+												<div
+													className="icon-teaser-box mb-small"
+													id="dropzone">
+													<div
+														className="icon-teaser-box__icon text-center col-3/12 col-1/1@m">
+														<i className="icon icon--upload-outline"/>
+													</div>
+													<div
+														className="col-9/12 col-1/1@m">
+														<div
+															className="icon-teaser-box__text">
+
+															<p>Datei zum
+																Hochladen
+																auswählen.</p>
+
+														</div>
+
+														<label
+															htmlFor="incomeproof"
+															id="uploadbutton"
+															className="btn btn--secondary"
+															style={{minWidth: 167}}>
+															Datei hochladen
+														</label>
+														<input
+															style={{display: "none"}}
+															onChange={this._sendMsgToSrv}
+															id="incomeproof"
+															accept="application/pdf, image/tiff, image/jpeg"
+															type="file"
+															className="btn btn--secondary"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div
+											className="form-row__item form-row__item--tooltip">
+											<p className="form-tooltip info-box js-form-tooltip mb@s">
+												Es können bis zu drei
+												Dateien
+												vom
+												Typ
+												JPG,
+												PDF und
+												TIFF mit einer Größe von bis
+												zu
+												4,5
+												MB
+												hochgeladen werden.</p>
+										</div>
+
+										<div className="form-row__item">
+											<ul id="documentlist"
+												className="list-bare">
+
+												<FileInfo/>
+
+											</ul>
+										</div>
+
+									</div>
+								</fieldset>
+
+							</form>
+						</div>
+					</div>
+				</main>
+			</div>
+
 		);
 
 	}
