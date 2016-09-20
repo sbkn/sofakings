@@ -9,7 +9,14 @@ export default class SessionSharing extends SessionSharingBase {
 
 	static propTypes = {
 		evaluateQueryString: React.PropTypes.bool,
-		showSessionLink: React.PropTypes.bool
+		showSessionLink: React.PropTypes.bool,
+		pageTitle: React.PropTypes.string
+	};
+
+	static defaultProps = {
+		evaluateQueryString: false,
+		showSessionLink: true,
+		pageTitle: "Einkommensnachweis hochladen"
 	};
 
 	state = {
@@ -189,7 +196,7 @@ export default class SessionSharing extends SessionSharingBase {
 									<div className="form-row__labels mb">
 										<div className="form-row__item">
 											<strong>
-												<span>Einkommensnachweis hochladen</span>
+												<span>{ this.props.pageTitle }</span>
 											</strong>
 											<p className="mb-none">Für die
 												Einrichtung
