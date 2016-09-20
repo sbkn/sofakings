@@ -41,9 +41,11 @@ export default class SessionSharing extends SessionSharingBase {
 
 		const qrImg = qr.createImgTag(4);
 		const foo = qrImg.substr(qrImg.indexOf("\"") + 1);
-		const bar = foo.substr(0, foo.indexOf("\""));
+		this.qrImgSrc = foo.substr(0, foo.indexOf("\""));
+	}
 
-		this.setState({qrImgSrc: bar});
+	componentDidMount() {
+		this.setState({qrImgSrc: this.qrImgSrc});
 	}
 
 	_getSessionIdFromUrl() {
@@ -143,7 +145,8 @@ export default class SessionSharing extends SessionSharingBase {
 										this.props.showSessionLink ?
 											<div>
 												<img id="qrCode"
-													 src={this.state.qrImgSrc}/>
+													 src={this.state.qrImgSrc}
+													 alt="QRCODE"/>
 
 												<a id="sessionLink"
 												   target="_blank"
