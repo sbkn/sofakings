@@ -142,6 +142,7 @@ export default class SessionSharing extends SessionSharingBase {
 		const frontEndFileId = uuid.v4();
 
 		this._addFileToList(fileName, frontEndFileId);
+		this._sendMsgToSrv(frontEndFileId, {fileName});
 
 		const request = {
 			sessionId: this.state.sessionId,
@@ -180,7 +181,11 @@ export default class SessionSharing extends SessionSharingBase {
 				return obj.frontEndFileId === state.frontEndFileId;
 			})[0];
 
-			obj.success = true;
+			if (obj) {
+				state.fileName = obj.fileName;
+				docs.splice(docs.indexOf(obj), 1);
+			}
+			docs.push(state);
 
 			this.setState({
 				docs
