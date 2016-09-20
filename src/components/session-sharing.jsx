@@ -86,7 +86,7 @@ export default class SessionSharing extends SessionSharingBase {
 		return (
 			<Jumbotron className="text-center jumbotron-fluid">
 				<div className="container">
-					<h1>Sofa Kongs</h1>
+					<h1>Sofa Kings</h1>
 
 					{
 						this.props.showSessionLink ?
@@ -94,7 +94,8 @@ export default class SessionSharing extends SessionSharingBase {
 								<img id="qrCode" src={this.state.qrImgSrc}/>
 
 								<a id="sessionLink"
-								   href={this.state.sessionLink}>
+								   target="_blank"
+								   href={"batman.html?" + this.sessionId}>
 									Session Link
 								</a>
 								<p>{this.sessionId}</p>
