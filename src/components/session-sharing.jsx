@@ -19,10 +19,6 @@ export default class SessionSharing extends SessionSharingBase {
 		pageTitle: "Einkommensnachweis hochladen"
 	};
 
-	state = {
-		docs: []
-	};
-
 	constructor(props) {
 
 		super(props);
@@ -38,6 +34,7 @@ export default class SessionSharing extends SessionSharingBase {
 			currentUuid = uuid.v4();
 		}
 
+		this.state = {docs: []};
 		this.state.sessionId = currentUuid;
 
 		this.init();
