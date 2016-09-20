@@ -7,8 +7,9 @@ module.exports = {
 	target: "web",
 
 	entry: {
-		mothman: "./src/views/mothman.jsx",
-		batman: "./src/views/batman.jsx"
+		mothman: ["./src/views/mothman.jsx", 'webpack/hot/only-dev-server'],
+		batman: ["./src/views/batman.jsx", 'webpack/hot/only-dev-server'],
+		client: 'webpack-dev-server/client?http://0.0.0.0:8080'
 	},
 
 	node: {
