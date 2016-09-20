@@ -1,9 +1,7 @@
 import React from "react";
 import AWSIoTData from "../../libs/aws-iot-sdk-browser-bundle";
-import "aws-sdk";
+import AWS from "exports?AWS!aws-sdk";
 import AWSConfiguration from "../aws-configuration.es6";
-
-AWS = window.AWS;
 
 export default class SessionSharingBase extends React.Component {
 
