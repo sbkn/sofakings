@@ -27,8 +27,10 @@ export default class SessionSharing extends SessionSharingBase {
 			this.sessionId = uuid.v4();
 		}
 
+		this.link = "http://" + window.location.host + "/batman.html?" + this.sessionId;
+
 		this.qrImgSrc = SessionSharing._getQRCodeSrc(
-			"http://" + window.location.host + "/batman.html?" + this.sessionId
+			this.link
 		);
 
 		this.init();
@@ -154,9 +156,9 @@ export default class SessionSharing extends SessionSharingBase {
 														 src={this.state.qrImgSrc}/>
 												</div>
 												<div className="form-row__item">
-													<a id="sessionLink"
+													<a hidden id="sessionLink"
 													   target="_blank"
-													   href={"batman.html?" + this.sessionId}>
+													   href={this.link}>
 														Session Link
 													</a>
 													<p>

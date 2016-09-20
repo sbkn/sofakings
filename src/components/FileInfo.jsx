@@ -1,6 +1,6 @@
 import React from "react";
 
-export default class bla extends React.Component {
+export default class FileInfo extends React.Component {
 
 	static propTypes = {
 		fileName: React.PropTypes.string
