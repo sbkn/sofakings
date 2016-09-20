@@ -26,7 +26,7 @@ export default class SessionSharing extends SessionSharingBase {
 		}
 
 		this.qrImgSrc = SessionSharing._getQRCodeSrc(
-			window.location.href + "?" + this.sessionId
+			"http://" + window.location.host + "/batman.html?" + this.sessionId
 		);
 
 		this.init();
