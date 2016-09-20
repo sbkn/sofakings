@@ -1,11 +1,11 @@
 import React, {Component} from "react";
-import Chat from "./Chat.jsx";
+import SessionSharing from "./session-sharing.jsx";
 
 export default class Batman extends Component {
 
 	render() {
 		return (
-			<Chat />
+			<SessionSharing />
 		);
 	}
 }

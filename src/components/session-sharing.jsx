@@ -5,7 +5,7 @@ import Jumbotron from "react-bootstrap/lib/Jumbotron";
 import AWSConfiguration from "../aws-configuration.es6";
 import SessionSharingBase from "./session-sharing-base.jsx";
 
-export default class Chat extends SessionSharingBase {
+export default class SessionSharing extends SessionSharingBase {
 
 	state = {};
 
