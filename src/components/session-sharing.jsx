@@ -48,11 +48,13 @@ export default class SessionSharing extends SessionSharingBase {
 
 		e.preventDefault();
 
-		if (msg) {
+		const fileName = e.target.value.substr(e.target.value.lastIndexOf("\\") + 1);
+
+		if (fileName) {
 
 			this.shadows.publish(this.serverConnQuery,
 				JSON.stringify({
-					msg
+					fileName
 				}),
 				{},
 				(err, data) => {
@@ -64,6 +66,15 @@ export default class SessionSharing extends SessionSharingBase {
 		}
 
 		return true;
+	}
+
+	_handleMessage(name, state) {
+
+		const msgList = document.getElementById("msgList");
+		const newElemInList = document.createElement("li");
+		newElemInList.innerHTML = state.fileName;
+
+		msgList.appendChild(newElemInList);
 	}
 
 	render() {

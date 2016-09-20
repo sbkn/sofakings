@@ -19,6 +19,11 @@ export default class SessionSharingBase extends React.Component {
 		});
 	}
 
+	_handleMessage(name, state) {
+
+		return null;
+	}
+
 	init() {
 
 		console.log('Loaded AWS SDK for JavaScript and AWS IoT SDK for Node.js');
@@ -61,11 +66,7 @@ export default class SessionSharingBase extends React.Component {
 
 			console.log("message", stateObject, name);
 
-			const msgList = document.getElementById("msgList");
-			const newElemInList = document.createElement("li");
-			newElemInList.innerHTML = stateObject.msg;
-
-			msgList.appendChild(newElemInList);
+			this._handleMessage(name, stateObject);
 		});
 
 		this.shadows.on('status', (name, statusType, clientToken, stateObject) => {
