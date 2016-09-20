@@ -2,7 +2,7 @@ import React from "react";
 import SessionSharingBase from "./session-sharing-base.jsx";
 import uuid from "uuid";
 import FileInfo from "./FileInfo.jsx";
-import qrCode from "qrcode-npm";
+import SessionLink from "./SessionLink.jsx";
 
 export default class SessionSharing extends SessionSharingBase {
 
@@ -27,25 +27,7 @@ export default class SessionSharing extends SessionSharingBase {
 			this.sessionId = uuid.v4();
 		}
 
-		this.link = "http://" + window.location.host + "/batman.html?" + this.sessionId;
-
-		this.qrImgSrc = SessionSharing._getQRCodeSrc(
-			this.link
-		);
-
 		this.init();
-	}
-
-	static _getQRCodeSrc(url) {
-
-		const qr = qrCode.qrcode(10, "M");
-
-		qr.addData(url);
-		qr.make();
-
-		const qrImg = qr.createImgTag(4);
-		const foo = qrImg.substr(qrImg.indexOf("\"") + 1);
-		return foo.substr(0, foo.indexOf("\""));
 	}
 
 	componentDidMount() {
@@ -99,11 +81,26 @@ export default class SessionSharing extends SessionSharingBase {
 
 	_handleMessage(name, state) {
 
-		const msgList = document.getElementById("msgList");
-		const newElemInList = document.createElement("li");
-		newElemInList.innerHTML = state.fileName;
+		console.log("msg", name);
 
-		msgList.appendChild(newElemInList);
+		if (name === this.sessionId + "-established") {
+
+			this.setState({
+				established: true,
+				platform: state.platform
+			});
+		}
+		else {
+			const docs = [...this.state.docs];
+
+			docs.push({
+				fileName: state.fileName
+			});
+
+			this.setState({
+				docs
+			});
+		}
 	}
 
 	render() {
@@ -149,38 +146,28 @@ export default class SessionSharing extends SessionSharingBase {
 
 									{
 										this.props.showSessionLink ?
-											<div
-												className="form-row form-row--halves">
-												<div className="form-row__item">
-													<img id="qrCode"
-														 src={this.state.qrImgSrc}/>
-												</div>
-												<div className="form-row__item">
-													<a hidden id="sessionLink"
-													   target="_blank"
-													   href={this.link}>
-														Session Link
-													</a>
-													<p>
-														SessionId: {this.sessionId}
-													</p>
-												</div>
-											</div>
+											<SessionLink
+												established={this.state.established}
+												platform={this.state.platform}
+												sessionId={this.sessionId}/>
 											: null
 									}
 
 									<div className="form-row__inputs mb">
 										<div className="form-row__item">
 											<div>
-												<div
-													className="icon-teaser-box mb-small"
-													id="dropzone">
-													<div
-														className="icon-teaser-box__icon text-center col-3/12 col-1/1@m">
+												<div className="icon-teaser-box
+												mb-small"
+													 id="dropzone">
+													<div className="icon-teaser-box__icon
+														text-center
+														col-3/12
+														col-1/1@m">
+
 														<i className="icon icon--upload-outline"/>
 													</div>
-													<div
-														className="col-9/12 col-1/1@m">
+													<div className="col-9/12
+													col-1/1@m">
 														<div
 															className="icon-teaser-box__text">
 
@@ -210,9 +197,12 @@ export default class SessionSharing extends SessionSharingBase {
 												</div>
 											</div>
 										</div>
-										<div
-											className="form-row__item form-row__item--tooltip">
-											<p className="form-tooltip info-box js-form-tooltip mb@s">
+										<div className="form-row__item
+										form-row__item--tooltip">
+
+											<p className="form-tooltip
+											info-box
+											js-form-tooltip mb@s">
 												Es können bis zu drei
 												Dateien
 												vom
@@ -233,6 +223,7 @@ export default class SessionSharing extends SessionSharingBase {
 												{
 													this.state.docs.map(doc => {
 														return <FileInfo
+															key={Math.random().toString()}
 															fileName={doc.fileName}/>
 													})
 												}

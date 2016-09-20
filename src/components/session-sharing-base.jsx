@@ -7,7 +7,6 @@ AWS = window.AWS;
 
 export default class SessionSharingBase extends React.Component {
 
-
 	constructor(props) {
 		super(props);
 
@@ -29,6 +28,7 @@ export default class SessionSharingBase extends React.Component {
 	}
 
 	shadowConnectHandler() {
+
 		console.log('connect');
 
 		if (!this.shadowsRegistered) {
@@ -39,10 +39,25 @@ export default class SessionSharingBase extends React.Component {
 				qos: 0
 			});
 
+			this.shadows.subscribe(this.sessionId + "-established", {
+
+				persistentSubscribe: true,
+				qos: 0
+			});
+
 			this.shadowsRegistered = true;
 		}
 
-		console.log(this.shadowsRegistered, this.shadows);
+		this.shadows.publish(this.sessionId + "-established",
+			JSON.stringify({
+				platform: window.navigator.platform
+			}),
+			{},
+			(err, data) => {
+				if (err) throw err;
+
+				console.log(err, data);
+			});
 	}
 
 	shadowReconnectHandler() {
