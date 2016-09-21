@@ -5,6 +5,7 @@ export default class FileInfo extends React.Component {
 	static propTypes = {
 		fileName: React.PropTypes.string,
 		fileId: React.PropTypes.string,
+		s3Link: React.PropTypes.string,
 		frontEndFileId: React.PropTypes.string,
 		deleteHandler: React.PropTypes.func
 	};
@@ -12,6 +13,7 @@ export default class FileInfo extends React.Component {
 	static defaultProps = {
 		fileName: "UNNAMED FILE",
 		fileId: null,
+		s3Link: "#",
 		frontEndFileId: null,
 		deleteHandler: null
 	};
@@ -47,6 +49,15 @@ export default class FileInfo extends React.Component {
 
 					<div className="pl-tiny truncate-short-and-fixed">
 						<span >
+                                <a href={this.props.s3Link} target="_blank"
+								   className="text-with-icon
+								   text-with-icon--magniglas
+								   text-with-icon--brand
+								   text-with-icon--narrow
+								   no-carpet
+								   weight-normal">
+									anzeigen
+								</a>
 							<a href="#"
 							   onClick={this._onDeleteClicked}
 							   className="text-with-icon

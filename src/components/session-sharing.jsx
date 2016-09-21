@@ -156,16 +156,13 @@ export default class SessionSharing extends SessionSharingBase {
 					break;
 
 				case "UPDATE" :
-					console.log(`UPDATING FILE IN LIST: ${JSON.stringify(state.file)}`);
 					const objToUpdate = docs.filter(obj => {
 						return obj.frontEndFileId === state.file.frontEndFileId;
 					})[0];
 
 					if (objToUpdate) {
-						console.log(`REMOVING FROM LIST: ${JSON.stringify(objToUpdate)}`);
 						state.file.fileName = objToUpdate.fileName;
 						docs.splice(docs.indexOf(objToUpdate), 1);
-						console.log(`NEW LIST: ${JSON.stringify(docs)}`);
 					} else {
 						throw new Error(`CANNOT FIND OBJECT TO UPDATE: ${JSON.stringify(state.file)}`);
 					}
@@ -173,7 +170,6 @@ export default class SessionSharing extends SessionSharingBase {
 					break;
 
 				case "DELETE" :
-					console.log(`DELETING FILE FROM LIST: ${JSON.stringify(state.file)}`);
 					const objToDelete = docs.filter(obj => {
 						return obj.frontEndFileId === state.file.frontEndFileId;
 					})[0];
@@ -337,6 +333,7 @@ export default class SessionSharing extends SessionSharingBase {
 										key={Math.random().toString()}
 										fileName={doc.fileName}
 										fileId={doc.fileId}
+										s3Link={doc.link}
 										frontEndFileId={doc.frontEndFileId}
 										deleteHandler={this._deleteFileFromS3}/>
 								})
