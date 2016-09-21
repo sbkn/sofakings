@@ -65,8 +65,6 @@ export default class SessionSharing extends SessionSharingBase {
 			{},
 			(err, data) => {
 				if (err) throw err;
-
-				console.log(err, data);
 			});
 
 		return true;
@@ -105,12 +103,13 @@ export default class SessionSharing extends SessionSharingBase {
 	_handleFileUpload(fileAsBase64, fileName) {
 
 
-
 		const fileToUploadAsBase64 = fileAsBase64.substr(fileAsBase64.indexOf(",") + 1);
 		const frontEndFileId = uuid.v4();
 
-		this._addFileToList(fileName, frontEndFileId);
-		this._sendMsgToSrv(frontEndFileId, {fileName});
+		this._sendMsgToSrv(frontEndFileId, {
+			OPERATION: "ADD",
+			file: {fileName, frontEndFileId}
+		});
 
 		const request = {
 			sessionId: this.state.sessionId,
@@ -120,12 +119,16 @@ export default class SessionSharing extends SessionSharingBase {
 		return this.apigClient.updownerPut({}, request, {})
 			.then(result => {
 
-				console.log("UpDowner response", result.data);
-				this._sendMsgToSrv(frontEndFileId, result.data);
+				console.log("UpDowner response:", result.data);
+				result.data.frontEndFileId = frontEndFileId;
+				this._sendMsgToSrv(frontEndFileId, {
+					OPERATION: "UPDATE",
+					file: result.data
+				});
 			})
 			.catch(err => {
 
-				console.error(err);
+				throw new Error(err);
 			});
 	}
 
@@ -133,7 +136,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 		console.log("Received msg over IoT:");
 		console.log("name", name);
-		console.log("state", state);
+		console.log("state", JSON.stringify(state));
 
 		if (name === this.state.sessionId + "-established") {
 
@@ -141,19 +144,48 @@ export default class SessionSharing extends SessionSharingBase {
 				established: true,
 				platform: state.platform
 			});
-		}
-		else {
+		} else {
+
 			const docs = [...this.state.docs];
 
-			const obj = docs.filter(obj => {
-				return obj.frontEndFileId === state.frontEndFileId;
-			})[0];
+			switch (state.OPERATION) {
 
-			if (obj) {
-				state.fileName = obj.fileName;
-				docs.splice(docs.indexOf(obj), 1);
+				case "ADD" :
+					console.log(`ADDING FILE TO LIST: ${JSON.stringify(state.file)}`);
+					docs.push(state.file);
+					break;
+
+				case "UPDATE" :
+					console.log(`UPDATING FILE IN LIST: ${JSON.stringify(state.file)}`);
+					const objToUpdate = docs.filter(obj => {
+						return obj.frontEndFileId === state.file.frontEndFileId;
+					})[0];
+
+					if (objToUpdate) {
+						console.log(`REMOVING FROM LIST: ${JSON.stringify(objToUpdate)}`);
+						state.file.fileName = objToUpdate.fileName;
+						docs.splice(docs.indexOf(objToUpdate), 1);
+						console.log(`NEW LIST: ${JSON.stringify(docs)}`);
+					} else {
+						throw new Error(`CANNOT FIND OBJECT TO UPDATE: ${JSON.stringify(state.file)}`);
+					}
+					docs.push(state.file);
+					break;
+
+				case "DELETE" :
+					console.log(`DELETING FILE FROM LIST: ${JSON.stringify(state.file)}`);
+					const objToDelete = docs.filter(obj => {
+						return obj.frontEndFileId === state.file.frontEndFileId;
+					})[0];
+
+					if (objToDelete) {
+						docs.splice(docs.indexOf(objToDelete), 1);
+					}
+					break;
+
+				default :
+					throw new Error(`INVALID OPERATION: ${state.OPERATION}`);
 			}
-			docs.push(state);
 
 			this.setState({
 				docs
@@ -194,18 +226,22 @@ export default class SessionSharing extends SessionSharingBase {
 		return uuid;
 	}
 
-	_deleteFileFromS3(backendFileId) {
+	_deleteFileFromS3(backendFileId, frontEndFileId) {
 
 		const request = {
 			session_id: this.state.sessionId,
 			file_id: backendFileId
 		};
-
+		console.log(`DELETE REQUEST: ${JSON.stringify(request)}`);
 		return this.apigClient.updownerSessionIdFileIdDelete(request, {}, {})
 			.then(() => {
 
 				console.log(`Deleted file sucessfully: ${backendFileId}`);
-				this._removeDocFromList(backendFileId);
+
+				this._sendMsgToSrv(frontEndFileId, {
+					OPERATION: "DELETE",
+					file: {frontEndFileId}
+				});
 			})
 			.catch(err => {
 
@@ -301,6 +337,7 @@ export default class SessionSharing extends SessionSharingBase {
 										key={Math.random().toString()}
 										fileName={doc.fileName}
 										fileId={doc.fileId}
+										frontEndFileId={doc.frontEndFileId}
 										deleteHandler={this._deleteFileFromS3}/>
 								})
 							}
@@ -312,22 +349,5 @@ export default class SessionSharing extends SessionSharingBase {
 			</fieldset>
 		);
 
-	}
-
-	_removeDocFromList(backendFileId) {
-
-		const docs = [...this.state.docs];
-
-		const obj = docs.filter(obj => {
-			return obj.fileId === backendFileId;
-		})[0];
-
-		if (obj) {
-			docs.splice(docs.indexOf(obj), 1);
-		}
-
-		this.setState({
-			docs
-		});
 	}
 }

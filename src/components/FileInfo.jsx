@@ -5,12 +5,14 @@ export default class FileInfo extends React.Component {
 	static propTypes = {
 		fileName: React.PropTypes.string,
 		fileId: React.PropTypes.string,
+		frontEndFileId: React.PropTypes.string,
 		deleteHandler: React.PropTypes.func
 	};
 
 	static defaultProps = {
 		fileName: "UNNAMED FILE",
 		fileId: null,
+		frontEndFileId: null,
 		deleteHandler: null
 	};
 
@@ -24,7 +26,7 @@ export default class FileInfo extends React.Component {
 	_onDeleteClicked() {
 
 		if (this.props.deleteHandler) {
-			this.props.deleteHandler(this.props.fileId);
+			this.props.deleteHandler(this.props.fileId, this.props.frontEndFileId);
 		}
 	}
 

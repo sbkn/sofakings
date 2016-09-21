@@ -1,0 +1,10 @@
+{
+	"OPERATION": "ADD / UPDATE / DELETE",
+	"file": {
+		"frontEndFileId": "uuid",
+		"success": true,
+		"fileName": "doc.pdf",
+		"fileId": "uuid",
+		"link": "http://asdasd.com"
+	}
+}
