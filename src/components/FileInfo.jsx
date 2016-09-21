@@ -7,7 +7,8 @@ export default class FileInfo extends React.Component {
 		fileId: React.PropTypes.string,
 		s3Link: React.PropTypes.string,
 		frontEndFileId: React.PropTypes.string,
-		deleteHandler: React.PropTypes.func
+		deleteHandler: React.PropTypes.func,
+		hasBeenProcessed: React.PropTypes.bool
 	};
 
 	static defaultProps = {
@@ -15,7 +16,8 @@ export default class FileInfo extends React.Component {
 		fileId: null,
 		s3Link: "#",
 		frontEndFileId: null,
-		deleteHandler: null
+		deleteHandler: null,
+		hasBeenProcessed: false
 	};
 
 	constructor(props) {
@@ -49,26 +51,34 @@ export default class FileInfo extends React.Component {
 
 					<div className="pl-tiny truncate-short-and-fixed">
 						<span >
-                                <a href={this.props.s3Link} target="_blank"
-								   className="text-with-icon
-								   text-with-icon--magniglas
-								   text-with-icon--brand
-								   text-with-icon--narrow
-								   no-carpet
-								   weight-normal">
-									anzeigen
-								</a>
-							<a href="#"
-							   onClick={this._onDeleteClicked}
-							   className="text-with-icon
-							   text-with-icon--error
-							   text-with-icon--trash
-							   text-with-icon--narrow
-							   no-carpet
-							   weight-normal">
+							{
+								this.props.hasBeenProcessed ?
+									<span>
+										<a href={this.props.s3Link}
+										   target="_blank"
+										   className="text-with-icon
+										   text-with-icon--magniglas
+										   text-with-icon--brand
+										   text-with-icon--narrow
+										   no-carpet
+										   weight-normal">
+											anzeigen
+										</a>
 
-								entfernen
-							</a>
+										<a href="#"
+										   onClick={this._onDeleteClicked}
+										   className="text-with-icon
+										   text-with-icon--error
+										   text-with-icon--trash
+										   text-with-icon--narrow
+										   no-carpet
+										   weight-normal">
+
+											entfernen
+										</a>
+									</span>
+									: null
+							}
 						</span>
 					</div>
 

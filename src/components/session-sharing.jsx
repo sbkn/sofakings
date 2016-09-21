@@ -121,6 +121,7 @@ export default class SessionSharing extends SessionSharingBase {
 
 				console.log("UpDowner response:", result.data);
 				result.data.frontEndFileId = frontEndFileId;
+				result.data.hasBeenProcessed = true;
 				this._sendMsgToSrv(frontEndFileId, {
 					OPERATION: "UPDATE",
 					file: result.data
@@ -335,6 +336,7 @@ export default class SessionSharing extends SessionSharingBase {
 										fileId={doc.fileId}
 										s3Link={doc.link}
 										frontEndFileId={doc.frontEndFileId}
+										hasBeenProcessed={doc.hasBeenProcessed}
 										deleteHandler={this._deleteFileFromS3}/>
 								})
 							}
