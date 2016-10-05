@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import SessionSharing from "../components/session-sharing.jsx";
+import App from "../components/app.jsx";
 
 ReactDOM.render(
-	<SessionSharing showSessionLink={false} evaluateQueryString={true}/>,
+	<App/>,
 	document.getElementById("root")
 );

@@ -41,14 +41,13 @@ module.exports = {
 			}
 		],
 		noParse: [
-			/aws\-sdk/,
-			/aws\-iot\-sdk/
+			/someRegEx/
 		]
 	},
 
 	resolve: {
 		alias: {
-			"aws-sdk": "aws-sdk/dist/aws-sdk.min.js"
+			"myCustomModule": "pathRelativeToNodeModules"
 		}
 	}
 };
