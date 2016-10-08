@@ -1,7 +1,7 @@
 {
-	"name": "session-sharing",
+	"name": "s",
 	"version": "0.0.1",
-	"description": "session sharing with React",
+	"description": "React boilerplate with hotloading",
 	"scripts": {
 		"start": "node server.js",
 		"lint": "eslint src",
@@ -12,7 +12,7 @@
 		"type": "git",
 		"url": "https://github.com/sbkn/sofakings.git"
 	},
-	"author": "dmks",
+	"author": "sbkn",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/sbkn/sofakings"
